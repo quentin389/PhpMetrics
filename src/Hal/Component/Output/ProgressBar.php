@@ -59,7 +59,7 @@ class ProgressBar
             $percent = round($this->current / $this->max * 100);
             $this->output->write("\x0D");
             $this->output->write("\x1B[2K");
-            $this->output->write(sprintf('... %s%% ...', $percent));
+            $this->output->write(sprintf('... %s / %s files (%s%%) ...', $this->current, $this->max, $percent));
         } else {
             $this->output->write('.');
         }

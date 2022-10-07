@@ -21,7 +21,7 @@ class StableAbstractionsPrinciple implements Violation
         if (! $metric instanceof PackageMetric) {
             return;
         }
-        if (abs($metric->getDistance()) > sqrt(2)/4) {
+        if (abs($metric->getDistance() ?? 0.0) > sqrt(2)/4) {
             $this->metric = $metric;
             $metric->get('violations')->add($this);
         }
