@@ -34,18 +34,11 @@ class PackageCollectingVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof Class_ || $node instanceof Interface_ || $node instanceof Trait_) {
-            $package = $this->namespace;
-
-            $docComment = $node->getDocComment();
-            $docBlockText = $docComment ? $docComment->getText() : '';
-            if (preg_match('/^\s*\* @package (.*)/m', $docBlockText, $matches)) {
-                $package = $matches[1];
+            $component = \Hal\Application\Analyze::$componentName;
+            if (!$component) {
+                return;
             }
-            if (preg_match('/^\s*\* @subpackage (.*)/m', $docBlockText, $matches)) {
-                $package = $package . '\\' . $matches[1];
-            }
-
-            $packageName = $package . '\\';
+            $packageName = 'Component ' . $component . '\\';
             if (! $packageMetric = $this->metrics->get($packageName)) {
                 $packageMetric = new PackageMetric($packageName);
                 $this->metrics->attach($packageMetric);

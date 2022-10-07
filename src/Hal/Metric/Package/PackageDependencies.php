@@ -51,11 +51,9 @@ class PackageDependencies
         if ($metrics->has($className) && $metrics->get($className)->has('package')) {
             return $metrics->get($className)->get('package');
         }
-        if (strpos($className, '\\') === false) {
-            return '\\';
+        if ($metrics->has($className) && $metrics->get($className)->has('@component')) {
+            return 'Component ' . $metrics->get($className)->get('@component') . '\\';
         }
-        $parts = explode('\\', $className);
-        array_pop($parts);
-        return implode('\\', $parts) . '\\';
+        return 'No Component';
     }
 }
