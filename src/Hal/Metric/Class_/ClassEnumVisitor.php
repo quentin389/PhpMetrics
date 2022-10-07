@@ -1,6 +1,7 @@
 <?php
 namespace Hal\Metric\Class_;
 
+use Hal\Application\Analyze;
 use Hal\Metric\ClassMetric;
 use Hal\Metric\FunctionMetric;
 use Hal\Metric\Helper\RoleOfMethodDetector;
@@ -42,6 +43,10 @@ class ClassEnumVisitor extends NodeVisitorAbstract
                 $class->set('interface', false);
                 $class->set('abstract', $node instanceof Stmt\Trait_ || $node->isAbstract());
                 $class->set('final', !$node instanceof Stmt\Trait_ && $node->isFinal());
+            }
+
+            if (Analyze::$componentName) {
+                $class->set('@component', Analyze::$componentName);
             }
 
             $methods = [];

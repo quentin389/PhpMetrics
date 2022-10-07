@@ -35,6 +35,7 @@ use PhpParser\ParserFactory;
  */
 class Analyze
 {
+    public static ?string $componentName = null;
 
     /**
      * @var Output
@@ -102,6 +103,14 @@ class Analyze
             $this->issuer->set('filename', $file);
             try {
                 $stmts = $parser->parse($code);
+                $firstDocBlock = array_key_exists(0, $stmts) ? $stmts[0]->getDocComment() : null;
+                static::$componentName = null;
+                if ($firstDocBlock) {
+                    if (preg_match('!\* ?@component (\w+)!', $firstDocBlock->getText(), $matches) && array_key_exists(1, $matches)) {
+                        static::$componentName = $matches[1];
+                    }
+                }
+
                 $this->issuer->set('statements', $stmts);
                 $traverser->traverse($stmts);
             } catch (Error $e) {
